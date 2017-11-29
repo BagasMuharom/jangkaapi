@@ -10,7 +10,7 @@ class BeritaController extends Controller
 {
     public function index()
     {
-        return Berita::all();
+        return Berita::all()->makeHidden('isi');
     }
 
     public function fromOffset(Request $request)
