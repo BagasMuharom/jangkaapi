@@ -17,6 +17,14 @@ class AuthController extends Controller
 
         $response['success'] = (User::where('username', $request->username)->where('password', $password)->count() == 1);
 
+        if($response['success']) {
+            $user = User::where('username', $request->username)->where('password', $password)->first();
+            $response['username'] = $user->username;
+            $response['id'] = $user->id;
+            $response['email'] = $user->email;
+            $response['avatar'] = $user->avatar;
+        }
+
         return response()->json($response);
     }
     
