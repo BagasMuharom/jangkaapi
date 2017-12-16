@@ -8,5 +8,9 @@ class Sejarah extends Model
 {
     
     protected $table = 'sejarah';
+
+    protected $fillable = [
+        'judul', 'isi', 'tgl_terjadi', 'gambar'
+    ];
     
 }

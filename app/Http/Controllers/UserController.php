@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\berita;
 
 class UserController extends Controller
 {
@@ -35,22 +36,18 @@ class UserController extends Controller
         ]);
     }
 
-    public function login(Request $request)
+    public function ubahAvatar(Request $request)
     {
-        $response = [];
+        $avatar = $request->file('avatar');
 
-        $response['success'] = (User::where('username', $request->username)->where('password', $request->password)->count() == 1);
+        $filename = User::find($request->user)->username . '.' . $avatar->getClientOriginalExtension();
 
-        if($response['success']) {
-            $response['id'] = User::where('username', $request->username)->where('password', $request->password)->first()->id;
-        }
+        LGD::dir('avatar')->put($filename, file_get_contents($avatar->getRealPath()));
 
-        return response()->json($response);
-    }
-
-    public function changeAvatar(Request $request)
-    {
-
+        LGD::dir('avatar')->file(
+            User::find($request->user)->username,
+            $avatar->getClientOriginalExtension()
+        )->show();
     }
 
     public function changeProfile(Request $request)
@@ -63,13 +60,20 @@ class UserController extends Controller
         $user = User::find($request->id);
 
         return response()->json(
-            $user->daftarBookmark()->get()->toArray()
+            $user->daftarBookmark()->get()->makehidden(['isi', 'created_at', 'updated_at'])->toArray()
         );
     }
 
-    public function hapusdariBookmark(Request $request)
+    public function hapusBookmark(Request $request)
     {
+        $user = User::find($request->user);
+        $berita = User::find($request->berita);
 
+        $user->daftarBookmark()->detach($berita);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function tambahBookmark(Request $request)
@@ -77,24 +81,12 @@ class UserController extends Controller
         $berita = Berita::find($request->berita);
         $user = User::find($request->user);
 
-        if($user->daftarBookmark()->where('id_berita', '!=', $berita->id)->count() == 0) {
-            $user->daftarBookmark()->attach($berita);
+        $user->daftarBookmark()->detach($berita);
+        $user->daftarBookmark()->attach($berita);        
 
-            return response()->json([
-                'success' => true
-            ]);
-        }
-        else if($user->daftarBookmark()->where('id_berita', '!=', $berita->id)->count() > 0) {
-            return response()->json([
-                'success' => true
-            ]);
-        }
-
-    }
-
-    public function unggahAvatar(Request $request)
-    {
-        $avatar = $request->avatar;
+        return response()->json([
+            'success' => true
+        ]);
     }
 
 }

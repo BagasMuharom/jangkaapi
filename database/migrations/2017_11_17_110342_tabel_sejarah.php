@@ -18,6 +18,7 @@ class TabelSejarah extends Migration
             $table->string('judul');
             $table->text('isi');
             $table->date('tgl_terjadi');
+            $table->string('gambar');
             $table->timestamps();
         });
     }

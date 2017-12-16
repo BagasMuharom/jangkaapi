@@ -4,25 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     
     public function login(Request $request)
     {
-        $username = $request->username;
-        $password = $request->password;
-
         $response = [];
 
-        $response['success'] = (User::where('username', $request->username)->where('password', $password)->count() == 1);
-
-        if($response['success']) {
-            $user = User::where('username', $request->username)->where('password', $password)->first();
-            $response['username'] = $user->username;
-            $response['id'] = $user->id;
-            $response['email'] = $user->email;
-            $response['avatar'] = $user->avatar;
+        if(Auth::attempt([
+            'username' => $request->username,
+            'password' => $request->password
+        ])) {
+            $response['user'] = User::where('username', $request->username)->first()->makeHidden('password')->toArray();
+            $response['success'] = true;            
+        }
+        else {
+            $response['success'] = false;
         }
 
         return response()->json($response);
@@ -30,21 +29,36 @@ class AuthController extends Controller
     
     public function register(Request $request)
     {
-        $this->validate($request, [
-            'username' => 'required|unique:user',
-            'email' => 'required|unique:user',
-            'password' => 'required|confirmed',
-        ]);
+        if(User::where('username', $request->username)->count() > 0) {
+            return response()->json([
+                'success' => false,
+                'errorCode' => 0
+            ]);
+        }
+
+        if(User::where('email', $request->email)->count() > 0) {
+            return response()->json([
+                'success' => false,
+                'errorCode' => 1
+            ]);
+        }
+
+        if($request->password != $request->password_confirmation) {
+            return response()->json([
+                'success' => false,
+                'errorCode' => 2
+            ]);
+        }
 
         $user = User::create([
-            'username' => $request->user,
+            'username' => $request->username,
             'email' => $request->email,
-            'password' => $request->password
+            'password' => bcrypt($request->password)
         ]);
 
         return response()->json([
             'success' => true,
-            'id' => $user->id
+            'user' => User::find($user)->makeHidden('password')->toArray()
         ]);
     }
 

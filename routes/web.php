@@ -14,7 +14,7 @@ Route::resource('kategori', 'KategoriController');
 
 Route::post('bookmark/tambah', 'UserController@tambahBookmark');
 
-Route::get('user/{id}', 'UserController@show');
+Route::post('bookmark/hapus', 'UserController@hapusBookmark');
 
 Route::group(['prefix' => 'berita'], function() {
 
@@ -26,6 +26,14 @@ Route::group(['prefix' => 'berita'], function() {
 
     Route::get('{id}/gambar', 'BeritaController@lihatGambar');
 
+    Route::post('tambah/like', 'BeritaController@tambahLike');
+
+    Route::post('tambah/dislike', 'BeritaController@tambahDislike');
+
+    Route::post('kurangi/like', 'BeritaController@kurangiLike');
+
+    Route::post('kurangi/dislike', 'BeritaController@kurangiDislike');
+
 });
 
 Route::group(['prefix' => 'komentar'], function() {
@@ -34,10 +42,18 @@ Route::group(['prefix' => 'komentar'], function() {
 
 });
 
+Route::group(['prefix' => 'user'], function() {
+
+    Route::post('unggah/avatar', 'UserController@unggahAvatar');
+    
+    Route::get('lihat/avatar', 'UserController@lihatAvatar');
+    
+    Route::get('{id}/bookmark', 'UserController@daftarBookmark');
+
+    Route::get('{id}', 'UserController@show');
+
+});
+
 Route::post('login', 'AuthController@login');
 
-Route::post('register', 'RegisterController@register');
-
-Route::post('user/unggah/avatar', 'UserController@unggahAvatar');
-
-Route::get('user/lihat/avatar', 'UserController@lihatAvatar');
+Route::post('register', 'AuthController@register');

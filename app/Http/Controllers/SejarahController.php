@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Sejarah;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class SejarahController extends Controller
 {
 
     public function index()
     {
-        // mendapatkan sejarah pada hari ini
+        return response()->json(
+            Sejarah::where('tgl_terjadi', Carbon::today())->get()->toArray()
+        );
     }
 
     public function create()
