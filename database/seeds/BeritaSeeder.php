@@ -13,7 +13,7 @@ class BeritaSeeder extends Seeder
      */
     public function run()
     {
-        factory(Berita::class, 50)->create();
+        factory(Berita::class, 20)->create();
 
         foreach(Berita::all() as $berita) {
             $jumlahKategori = rand() % 3;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Berita;
+use App\Komentar;
 
 class KomentarController extends Controller
 {
@@ -19,21 +20,18 @@ class KomentarController extends Controller
         ]);
 
         return response()->json([
-            'success' => true
+            'success' => true,
+            'id_komentar' => $user->daftarKomentar()->last()->pivot->id
         ]);
     }
 
     public function hapus(Request $request)
     {
-        $user = User::find($request->id_user);
-        $komentar = $user->daftarKomentar()->wherePivot('id', $request->id_komentar)->first();
-
-        $komentar->delete();
+        Komentar::find($request->id_komentar)->delete();
 
         return response()->json([
             'success' => true
         ]);
-        
     }
 
 }

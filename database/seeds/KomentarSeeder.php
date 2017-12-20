@@ -16,10 +16,12 @@ class KomentarSeeder extends Seeder
     public function run()
     {
         foreach(User::all() as $user) {
-            $berita = Berita::all()->random();
-            $user->daftarKomentar()->attach($berita, [
-                'isi' => Factory::create()->sentence(6)
-            ]);
+            for($i = 1; $i <= 5; $i++) {
+                $berita = Berita::whereNotIn('id', $user->daftarKomentar()->get()->pluck('id')->toArray())->get()->random();
+                $user->daftarKomentar()->attach($berita, [
+                    'isi' => Factory::create()->sentence(6)
+                ]);
+            }
         }
     }
 

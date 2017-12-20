@@ -22,7 +22,8 @@ class SejarahSeeder extends Seeder
                 Sejarah::create([
                     'judul' => $faker->sentence(6),
                     'isi' => $faker->sentence(20),
-                    'tgl_terjadi' => $waktu
+                    'tgl_terjadi' => $waktu,
+                    'gambar' => 'sejarah.jpg'
                 ]);
             }
         }

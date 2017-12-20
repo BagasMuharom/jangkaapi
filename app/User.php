@@ -21,15 +21,6 @@ class User extends Authenticatable
         'username', 'email', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'pivot'
-    ];
-
     public function daftarKomentar()
     {
         return $this->belongsToMany(

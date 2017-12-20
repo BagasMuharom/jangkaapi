@@ -11,8 +11,6 @@ class Berita extends Model
     
     protected $table = 'berita';
 
-    protected $hidden = ['pivot'];
-
     protected $fillable = [
         'judul', 'isi'
     ];

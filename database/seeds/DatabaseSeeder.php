@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call('BeritaSeeder');
         $this->call('KomentarSeeder');
         $this->call('FeedbackSeeder');
+        $this->call('BookmarkSeeder');
+        $this->call('SejarahSeeder');
     }
 
 }

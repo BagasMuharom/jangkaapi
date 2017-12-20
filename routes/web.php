@@ -40,6 +40,8 @@ Route::group(['prefix' => 'komentar'], function() {
 
     Route::post('tambah', 'KomentarController@tambah');
 
+    Route::post('hapus', 'KomentarController@hapus');
+
 });
 
 Route::group(['prefix' => 'user'], function() {
