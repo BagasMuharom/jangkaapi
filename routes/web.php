@@ -26,13 +26,7 @@ Route::group(['prefix' => 'berita'], function() {
 
     Route::get('{id}/gambar', 'BeritaController@lihatGambar');
 
-    Route::post('tambah/like', 'BeritaController@tambahLike');
-
-    Route::post('tambah/dislike', 'BeritaController@tambahDislike');
-
-    Route::post('kurangi/like', 'BeritaController@kurangiLike');
-
-    Route::post('kurangi/dislike', 'BeritaController@kurangiDislike');
+    Route::post('toggle/feedback', 'BeritaController@toggleFeedback');
 
 });
 

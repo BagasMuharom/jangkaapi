@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\berita;
+use Smadia\LaravelGoogleDrive\Facades\LaravelGoogleDrive as LGD;
 
 class UserController extends Controller
 {
@@ -36,23 +37,17 @@ class UserController extends Controller
         ]);
     }
 
-    public function ubahAvatar(Request $request)
+    public function unggahAvatar(Request $request)
     {
-        $avatar = $request->file('avatar');
+        $avatar = base64_decode($request->avatar);
 
-        $filename = User::find($request->user)->username . '.' . $avatar->getClientOriginalExtension();
+        $filename = $request->user . '.jpg';
 
-        LGD::dir('avatar')->put($filename, file_get_contents($avatar->getRealPath()));
+        LGD::dir('avatar')->put($filename, $avatar);
 
-        LGD::dir('avatar')->file(
-            User::find($request->user)->username,
-            $avatar->getClientOriginalExtension()
-        )->show();
-    }
-
-    public function changeProfile(Request $request)
-    {
-        
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function daftarBookmark(Request $request)

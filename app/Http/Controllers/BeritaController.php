@@ -76,58 +76,43 @@ class BeritaController extends Controller
         return LGD::file($name, $extension)->show();
     }
 
-    public function tambahLike(Request $request)
-    {
-        $user = User::find($request->user);
+    public function toggleFeedback(Request $request) {
+        $suka = $request->suka;
+        $user = $request->user;
         $berita = Berita::find($request->berita);
-        
-        $berita->daftarFeedback()->detach($user);
-        $berita->daftarFeedback()->attach($user, [
-            'suka' => true
-        ]);
+        $response = [];
 
-        return response()->json([
-            'success' => true
-        ]);
-    }
+        if($suka) {
+            if($berita->daftarFeedback()->wherePivot('id_user', $user)->wherePivot('suka', true)->count() > 0) {
+                $berita->daftarFeedback()->detach($user);
+                $response['disukai'] = false;
+            }
+            else {
+                $berita->daftarFeedback()->detach($user);
+                $berita->daftarFeedback()->attach($user, [
+                    'suka' => true
+                ]);
+                $response['disukai'] = true;                
+            }
+            $response['tidak_disukai'] = false;
+        }
+        else {
+            if($berita->daftarFeedback()->wherePivot('id_user', $user)->wherePivot('suka', false)->count() > 0) {
+                $berita->daftarFeedback()->detach($user);
+                $response['tidak_disukai'] = false;                
+            }
+            else {
+                $berita->daftarFeedback()->detach($user);
+                $berita->daftarFeedback()->attach($user, [
+                    'suka' => false
+                ]);
+                $response['tidak_disukai'] = true;                
+            }
+            $response['disukai'] = false;            
+        }
 
-    public function kurangiLike(Reuqest $request)
-    {
-        $user = User::find($request->user);
-        $berita = Berita::find($request->berita);
-
-        $berita->daftarFeedback()->detach($user);
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-
-    public function tambahDislike(Reuqest $request)
-    {
-        $user = User::find($request->user);
-        $berita = Berita::find($request->berita);
-
-        $berita->daftarFeedback()->detach($user);        
-        $berita->daftarFeedback()->attach($user, [
-            'suka' => false
-        ]);
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-    
-    public function kurangiDislike(Request $request)
-    {
-        $user = User::find($request->user);
-        $berita = Berita::find($request->berita);
-
-        $berita->daftarFeedback()->detach($user);
-
-        return response()->json([
-            'success' => true
-        ]);
+        $response['success'] = true;
+        return response()->json($response);
     }
 
 }
