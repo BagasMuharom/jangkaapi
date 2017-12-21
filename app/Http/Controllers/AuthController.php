@@ -58,7 +58,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'user' => User::find($user)->makeHidden('password')->toArray()
+            'user' => $user->makeHidden('password')->toArray()
         ]);
     }
 
