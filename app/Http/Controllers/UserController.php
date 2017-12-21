@@ -84,4 +84,9 @@ class UserController extends Controller
         ]);
     }
 
+    public function lihatAvatar($id)
+    {
+        return LGD::dir('avatar')->file($id, 'jpg')->show();
+    }
+
 }

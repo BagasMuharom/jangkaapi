@@ -12,6 +12,8 @@ Route::resource('sejarah', 'SejarahController');
 
 Route::resource('kategori', 'KategoriController');
 
+Route::get('kategori/{id}/berita', 'KategoriController@daftarberita');
+
 Route::post('bookmark/tambah', 'UserController@tambahBookmark');
 
 Route::post('bookmark/hapus', 'UserController@hapusBookmark');
@@ -42,7 +44,7 @@ Route::group(['prefix' => 'user'], function() {
 
     Route::post('unggah/avatar', 'UserController@unggahAvatar');
     
-    Route::get('lihat/avatar', 'UserController@lihatAvatar');
+    Route::get('{id}/avatar', 'UserController@lihatAvatar');
     
     Route::get('{id}/bookmark', 'UserController@daftarBookmark');
 

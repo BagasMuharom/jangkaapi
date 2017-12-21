@@ -21,4 +21,11 @@ class KategoriController extends Controller
             );
     }
 
+    public function daftarBerita($id)
+    {
+        return response()->json(
+            Kategori::find($id)->daftarBerita()->get()->toArray()
+        );
+    }
+
 }
